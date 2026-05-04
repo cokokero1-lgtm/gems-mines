@@ -3,162 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GEMS MINES - VIP PRESTIGE</title>
+    <title>GEMS MINES - VIP</title>
     <style>
-        :root {
-            --gold: #ffd700;
-            --electric-blue: #00d4ff;
-            --bg-dark: #000c18;
-            --vip-red: #ff3e3e;
-        }
-
-        body, html {
-            margin: 0; padding: 0; font-family: sans-serif;
-            background-color: var(--bg-dark); color: white; overflow-x: hidden;
-            height: 100%;
-        }
-
-        /* --- الشاشات --- */
-        .screen {
-            display: none; min-height: 100vh; width: 100%; flex-direction: column; 
-            align-items: center; justify-content: center; text-align: center;
-        }
-
+        :root { --gold: #ffd700; --blue: #00d4ff; --dark: #000c18; }
+        body, html { margin: 0; padding: 0; font-family: sans-serif; background: var(--dark); color: white; height: 100%; overflow: hidden; }
+        
+        .screen { display: none; height: 100vh; width: 100%; flex-direction: column; align-items: center; justify-content: center; position: absolute; top: 0; left: 0; }
         .active { display: flex !important; }
 
-        #screen-landing {
-            background: linear-gradient(rgba(0,12,24,0.85), rgba(0,12,24,0.85)), 
-                        url('https://images.unsplash.com/photo-1596838132731-3301c3fd4317?q=80&w=1000');
-            background-size: cover;
-        }
+        /* شاشة 1 */
+        #screen-landing { background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1596838132731-3301c3fd4317?q=80&w=1000') center/cover; }
+        .btn-group { display: flex; flex-direction: column; gap: 20px; width: 80%; max-width: 300px; }
+        .btn-trial { padding: 15px; border: 2px solid white; background: none; color: white; border-radius: 10px; cursor: pointer; }
+        .btn-vip { padding: 15px; background: linear-gradient(145deg, #ffd700, #b8860b); color: black; border-radius: 10px; font-weight: bold; cursor: pointer; border: none; font-size: 18px; }
 
-        .main-title {
-            font-size: 40px; color: var(--gold); text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-            margin-bottom: 40px; font-weight: bold;
-        }
+        /* شاشات الإدخال */
+        .box { background: rgba(0, 40, 80, 0.9); padding: 30px; border-radius: 20px; border: 2px solid var(--blue); width: 80%; max-width: 280px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 15px 0; border-radius: 8px; border: 1px solid var(--blue); background: #000; color: white; text-align: center; box-sizing: border-box; }
+        .go-btn { width: 100%; padding: 12px; background: var(--blue); color: black; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        .btn-group { display: flex; flex-direction: column; gap: 20px; width: 90%; max-width: 320px; }
-
-        .btn-trial {
-            background: rgba(255,255,255,0.1); border: 2px solid white; color: white;
-            padding: 15px; border-radius: 12px; font-size: 16px; cursor: pointer;
-        }
-
-        .btn-vip-gold {
-            background: linear-gradient(145deg, #ffd700, #b8860b);
-            border: 3px solid #fff; border-radius: 15px; padding: 15px;
-            cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-
-        .btn-vip-gold .text-box { color: #000; font-weight: bold; font-size: 18px; }
-
-        .auth-box {
-            background: rgba(0, 41, 75, 0.95); padding: 25px; border-radius: 20px;
-            border: 2px solid var(--electric-blue); width: 85%; max-width: 300px;
-        }
-
-        input {
-            width: 100%; padding: 12px; margin: 15px 0; border-radius: 10px;
-            border: 1px solid var(--electric-blue); background: #000; color: white;
-            font-size: 18px; text-align: center; outline: none;
-        }
-
-        .submit-btn {
-            background: var(--electric-blue); color: #000; border: none; padding: 12px;
-            width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer;
-        }
-
-        /* --- اللعبة --- */
-        .grid {
-            display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
-            background: #0a4269; padding: 10px; border-radius: 12px; border: 2px solid var(--electric-blue);
-        }
-
-        .cell {
-            width: 50px; height: 50px; background: #1a5a8a; border-radius: 8px;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-size: 22px; border: 1px solid var(--electric-blue);
-        }
-
-        .cell.gem { background: linear-gradient(135deg, var(--electric-blue), #005f73); }
-        .cell.bomb { background: linear-gradient(135deg, #ff4d4d, #800000); }
-
-        .controls { margin-top: 15px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; width: 100%; }
-        .btn-control { padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: white; flex: 1; min-width: 100px; }
+        /* اللعبة */
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; background: #0a4269; padding: 10px; border-radius: 10px; }
+        .cell { width: 50px; height: 50px; background: #1a5a8a; border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .cell.gem { background: #00d4ff; }
+        .cell.bomb { background: #ff4d4d; }
     </style>
 </head>
 <body>
 
     <div id="screen-landing" class="screen active">
-        <h1 class="main-title">GEMS MINES<br><span style="color:white; font-size: 20px;">VIP PRESTIGE</span></h1>
+        <h1 style="color:var(--gold); font-size: 35px; margin-bottom: 30px;">GEMS MINES VIP</h1>
         <div class="btn-group">
-            <button class="btn-trial" onclick="showScreen('screen-id')">تجربة مجانية لفترة محدودة</button>
-            <div class="btn-vip-gold" onclick="showScreen('screen-id')">
-                <span style="font-size: 30px;">🐉</span>
-                <div class="text-box">VIP ACCESS</div>
-            </div>
+            <button class="btn-trial" onclick="goToScreen('screen-id')">تجربة مجانية</button>
+            <button class="btn-vip" onclick="goToScreen('screen-id')">🐉 VIP ACCESS</button>
         </div>
     </div>
 
     <div id="screen-id" class="screen">
-        <div class="auth-box">
-            <h2 style="color:var(--electric-blue)">تأكيد الـ ID</h2>
-            <input type="text" id="idInput" placeholder="أدخل الـ ID الخاص بك">
-            <button class="submit-btn" onclick="checkID()">استمرار</button>
+        <div class="box">
+            <h2 style="color:var(--blue)">تأكيد الـ ID</h2>
+            <input type="text" id="idVal" placeholder="أدخل ID المستخدم">
+            <button class="go-btn" onclick="validateID()">استمرار</button>
         </div>
     </div>
 
     <div id="screen-pass" class="screen">
-        <div class="auth-box">
-            <h2 style="color:var(--gold)">دخول آمن</h2>
-            <input type="password" id="passInput" placeholder="Password">
-            <button class="submit-btn" style="background:var(--gold)" onclick="checkPass()">دخول</button>
+        <div class="box">
+            <h2 style="color:var(--gold)">الباسورد</h2>
+            <input type="password" id="passVal" placeholder="كلمة المرور">
+            <button class="go-btn" style="background:var(--gold)" onclick="validatePass()">دخول</button>
         </div>
     </div>
 
     <div id="screen-game" class="screen">
-        <div style="color:var(--electric-blue); font-size: 24px; margin-bottom: 15px; font-weight: bold;">VIP PLATFORM</div>
-        <div class="grid" id="grid"></div>
-        <div style="margin: 15px 0; font-size: 18px;">
-            💎: <span id="score">0</span> | 💣: <span id="bombs">0</span>
+        <div id="grid" class="grid"></div>
+        <div style="margin-top:20px;">
+            💎: <span id="s_score">0</span> | 💣: <span id="s_bombs">0</span>
         </div>
-        <div class="controls">
-            <button class="btn-control" style="background: #ffc107; color: #000;" onclick="undoMove()">تراجع</button>
-            <button class="btn-control" style="background: #dc3545;" onclick="resetCurrentRound()">إعادة</button>
-            <button class="btn-control" style="background: #28a745; min-width: 210px;" onclick="startNewGame()">🆕 لعبة جديدة (2 قنبلة)</button>
-        </div>
+        <button onclick="initGame()" style="margin-top:20px; padding:10px 30px; background:#28a745; color:white; border:none; border-radius:5px;">لعبة جديدة</button>
     </div>
 
     <script>
-        // قائمة الـ IDs المسموحة
-        const allowedIDs = ["user1", "admin", "15711", "10020025"];
+        const ids = ["user1", "admin", "15711", "10020025"];
 
-        function showScreen(id) {
+        function goToScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            const target = document.getElementById(id);
-            if(target) target.classList.add('active');
+            document.getElementById(id).classList.add('active');
         }
 
-        function checkID() {
-            const val = document.getElementById('idInput').value.trim();
-            if (allowedIDs.includes(val)) {
-                showScreen('screen-pass');
-            } else {
-                alert("الـ ID غير مسجل!");
+        function validateID() {
+            const v = document.getElementById('idVal').value.trim();
+            if(ids.includes(v)) { goToScreen('screen-pass'); }
+            else { alert("ID غير صحيح"); }
+        }
+
+        function validatePass() {
+            const v = document.getElementById('passVal').value;
+            if(v === "15711") { goToScreen('screen-game'); initGame(); }
+            else { alert("باسورد خطأ"); }
+        }
+
+        let bombs = [];
+        function initGame() {
+            const g = document.getElementById('grid'); g.innerHTML = '';
+            document.getElementById('s_score').innerText = '0';
+            document.getElementById('s_bombs').innerText = '0';
+            bombs = [];
+            while(bombs.length < 2) {
+                let r = Math.floor(Math.random()*25);
+                if(!bombs.includes(r)) bombs.push(r);
+            }
+            for(let i=0; i<25; i++) {
+                let c = document.createElement('div');
+                c.className = 'cell';
+                c.onclick = () => {
+                    if(c.innerHTML !== '') return;
+                    if(bombs.includes(i)) { c.innerHTML = '💣'; c.classList.add('bomb'); document.getElementById('s_bombs').innerText = '1'; }
+                    else { c.innerHTML = '💎'; c.classList.add('gem'); let s = document.getElementById('s_score'); s.innerText = parseInt(s.innerText)+1; }
+                };
+                g.appendChild(c);
             }
         }
-
-        function checkPass() {
-            const val = document.getElementById('passInput').value;
-            if (val === "15711") {
-                showScreen('screen-game');
-                startNewGame();
-            } else {
-                alert("الباسورد خطأ!");
-            }
-        }
-
-        // منطق اللعبة
-        let score = 0, bombsFound = 0, bombPositions = [], moveHistory = [];
-
-        function startNewGame() {
+    </script>
+</body>
+</html>
