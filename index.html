@@ -3,26 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GEMS MINES - VIP</title>
+    <title>GEMS MINES - VIP FIXED</title>
     <style>
         :root { --gold: #ffd700; --blue: #00d4ff; --dark: #000c18; }
         body, html { margin: 0; padding: 0; font-family: sans-serif; background: var(--dark); color: white; height: 100%; overflow: hidden; }
-        
         .screen { display: none; height: 100vh; width: 100%; flex-direction: column; align-items: center; justify-content: center; position: absolute; top: 0; left: 0; }
         .active { display: flex !important; }
-
-        /* شاشة 1 */
-        #screen-landing { background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1596838132731-3301c3fd4317?q=80&w=1000') center/cover; }
-        .btn-group { display: flex; flex-direction: column; gap: 20px; width: 80%; max-width: 300px; }
-        .btn-trial { padding: 15px; border: 2px solid white; background: none; color: white; border-radius: 10px; cursor: pointer; }
-        .btn-vip { padding: 15px; background: linear-gradient(145deg, #ffd700, #b8860b); color: black; border-radius: 10px; font-weight: bold; cursor: pointer; border: none; font-size: 18px; }
-
-        /* شاشات الإدخال */
         .box { background: rgba(0, 40, 80, 0.9); padding: 30px; border-radius: 20px; border: 2px solid var(--blue); width: 80%; max-width: 280px; text-align: center; }
         input { width: 100%; padding: 12px; margin: 15px 0; border-radius: 8px; border: 1px solid var(--blue); background: #000; color: white; text-align: center; box-sizing: border-box; }
         .go-btn { width: 100%; padding: 12px; background: var(--blue); color: black; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-
-        /* اللعبة */
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; background: #0a4269; padding: 10px; border-radius: 10px; }
         .cell { width: 50px; height: 50px; background: #1a5a8a; border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; }
         .cell.gem { background: #00d4ff; }
@@ -33,10 +22,7 @@
 
     <div id="screen-landing" class="screen active">
         <h1 style="color:var(--gold); font-size: 35px; margin-bottom: 30px;">GEMS MINES VIP</h1>
-        <div class="btn-group">
-            <button class="btn-trial" onclick="goToScreen('screen-id')">تجربة مجانية</button>
-            <button class="btn-vip" onclick="goToScreen('screen-id')">🐉 VIP ACCESS</button>
-        </div>
+        <button class="go-btn" style="width:200px" onclick="goToScreen('screen-id')">دخول اللعبة</button>
     </div>
 
     <div id="screen-id" class="screen">
@@ -57,10 +43,8 @@
 
     <div id="screen-game" class="screen">
         <div id="grid" class="grid"></div>
-        <div style="margin-top:20px;">
-            💎: <span id="s_score">0</span> | 💣: <span id="s_bombs">0</span>
-        </div>
-        <button onclick="initGame()" style="margin-top:20px; padding:10px 30px; background:#28a745; color:white; border:none; border-radius:5px;">لعبة جديدة</button>
+        <div style="margin-top:20px;">💎: <span id="s_score">0</span> | 💣: <span id="s_bombs">0</span></div>
+        <button onclick="initGame()" style="margin-top:20px; padding:10px 30px; background:#28a745; color:white; border:none; border-radius:5px;">لعبة جديدة (وضع ثابت)</button>
     </div>
 
     <script>
@@ -88,18 +72,26 @@
             const g = document.getElementById('grid'); g.innerHTML = '';
             document.getElementById('s_score').innerText = '0';
             document.getElementById('s_bombs').innerText = '0';
-            bombs = [];
-            while(bombs.length < 2) {
-                let r = Math.floor(Math.random()*25);
-                if(!bombs.includes(r)) bombs.push(r);
-            }
+            
+            // --- التعديل هنا: القنابل في أماكن محددة ---
+            // الخانة 0 (أول واحدة يمين فوق) والخانة 3 (ثاني واحدة من الشمال فوق)
+            bombs = [0, 3]; 
+
             for(let i=0; i<25; i++) {
                 let c = document.createElement('div');
                 c.className = 'cell';
                 c.onclick = () => {
                     if(c.innerHTML !== '') return;
-                    if(bombs.includes(i)) { c.innerHTML = '💣'; c.classList.add('bomb'); document.getElementById('s_bombs').innerText = '1'; }
-                    else { c.innerHTML = '💎'; c.classList.add('gem'); let s = document.getElementById('s_score'); s.innerText = parseInt(s.innerText)+1; }
+                    if(bombs.includes(i)) { 
+                        c.innerHTML = '💣'; 
+                        c.classList.add('bomb'); 
+                        document.getElementById('s_bombs').innerText = parseInt(document.getElementById('s_bombs').innerText) + 1;
+                    } else { 
+                        c.innerHTML = '💎'; 
+                        c.classList.add('gem'); 
+                        let s = document.getElementById('s_score'); 
+                        s.innerText = parseInt(s.innerText)+1; 
+                    }
                 };
                 g.appendChild(c);
             }
