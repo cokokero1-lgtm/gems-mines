@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,14 +36,14 @@
         <div class="glass-panel">
             <h2 style="color:var(--gold)">SYSTEM ENCRYPTION</h2>
             <input type="password" id="passInput" placeholder="ACCESS KEY">
-            <button class="btn-3d" onclick="validatePass()">DECRYPT</button>
+            <button class="btn-3d" onclick="validatePass()">DECRYPT SYSTEM</button>
         </div>
     </div>
 
     <div id="screen-choice" class="screen">
         <div class="glass-panel">
             <h1 style="color:var(--blue); font-size: 22px;">HHACK ANALYZER V3</h1>
-            <button class="btn-3d" onclick="goToID()">FREE TRIAL</button>
+            <button class="btn-3d" onclick="goToID()">FREE TRIAL MODE</button>
             <button class="btn-3d btn-vip" onclick="askVipPass()">🐉 VIP SERVER ACCESS</button>
         </div>
     </div>
@@ -51,8 +51,8 @@
     <div id="screen-id" class="screen">
         <div class="glass-panel">
             <h2 style="color:var(--blue)">USER VALIDATION</h2>
-            <input type="password" id="idInput" placeholder="ENTER ID">
-            <button class="btn-3d" onclick="validateID()">CONNECT</button>
+            <input type="password" id="idInput" placeholder="ENTER PLAYER ID">
+            <button class="btn-3d" onclick="validateID()">CONNECT TO SERVER</button>
         </div>
     </div>
 
@@ -72,7 +72,6 @@
     </div>
 
     <script>
-        // القائمة المحدثة بالـ ID الجديد
         const allowedIDs = ["user1", "admin", "15711", "10020025", "1002075", "1658237633"];
         
         const bgMusic = document.getElementById('bg-music');
@@ -103,7 +102,7 @@
             if(allowedIDs.includes(id)) { 
                 playSound('click'); showScreen('screen-game'); initGame(); 
                 setTimeout(() => updateFeed("Trial User: " + id + " verified."), 1000);
-            } else { alert("هذا الـ ID غير مسجل!"); }
+            } else { alert("ERROR: ID NOT REGISTERED!"); }
         }
 
         let bombs = [2, 7, 12, 18]; 
@@ -111,13 +110,13 @@
             const g = document.getElementById('grid'); g.innerHTML = '';
             document.getElementById('s_score').innerText = '0';
             document.getElementById('s_bombs').innerText = '0';
-            updateFeed("Scanning grid...");
+            updateFeed("Scanning grid for patterns...");
             for(let i=0; i<25; i++) {
                 let c = document.createElement('div');
                 c.className = 'cell';
                 c.onclick = () => {
                     if(c.innerHTML !== '') return;
-                    if(bombs.includes(i)) { playSound('bomb'); c.innerHTML = '💣'; c.style.background = "#440000"; document.getElementById('s_bombs').innerText = "1"; updateFeed("BOMB DETECTED."); } 
+                    if(bombs.includes(i)) { playSound('bomb'); c.innerHTML = '💣'; c.style.background = "#440000"; document.getElementById('s_bombs').innerText = "1"; updateFeed("WARNING: BOMB DETECTED!"); } 
                     else { playSound('click'); c.innerHTML = '💎'; c.style.background = "#004466"; let s = document.getElementById('s_score'); s.innerText = parseInt(s.innerText) + 1; updateFeed("NODE " + i + " SECURED."); }
                 };
                 g.appendChild(c);
