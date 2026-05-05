@@ -1,121 +1,224 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HHACK VIP - PRO ANALYZER</title>
-    <style>
-        :root { --gold: #ffd700; --blue: #00d4ff; --bg: #000c18; --neon: 0 0 15px rgba(0, 212, 255, 0.6); }
-        body, html { margin: 0; padding: 0; font-family: 'Consolas', monospace; background: radial-gradient(circle, #001a33 0%, #00050a 100%); color: white; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .signal-container { display: flex; align-items: center; gap: 5px; margin-bottom: 10px; font-size: 12px; color: var(--blue); text-shadow: var(--neon); }
-        .signal-bar { width: 4px; background: var(--blue); border-radius: 2px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-        #live-feed { width: 100%; height: 50px; background: rgba(0,0,0,0.7); border: 1px solid #004466; border-radius: 8px; margin-top: 15px; font-size: 10px; overflow: hidden; text-align: left; padding: 5px; color: #00ff00; }
-        #mute-btn { position: fixed; top: 20px; right: 20px; z-index: 1000; background: rgba(0,0,0,0.5); border: 1px solid var(--blue); color: white; padding: 10px; border-radius: 50%; cursor: pointer; }
-        .glass-panel { background: rgba(0, 26, 51, 0.95); border: 1px solid var(--blue); box-shadow: var(--neon); border-radius: 20px; padding: 25px; text-align: center; width: 85%; max-width: 350px; }
-        .screen { display: none; width: 100%; flex-direction: column; align-items: center; }
-        .active { display: flex !important; }
-        .btn-3d { width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 12px; font-weight: bold; font-size: 18px; cursor: pointer; box-shadow: 0 5px 0 #0088aa; background: linear-gradient(to bottom, #00d4ff, #00aacc); color: #001a33; }
-        .btn-3d:active { transform: translateY(3px); box-shadow: 0 2px 0 #0088aa; }
-        .btn-vip { background: linear-gradient(145deg, #ffd700, #b8860b); box-shadow: 0 5px 0 #8a6d00; color: black; }
-        input { width: 100%; padding: 15px; margin: 15px 0; border-radius: 10px; border: 1px solid var(--blue); background: #000; color: var(--blue); font-size: 20px; text-align: center; box-sizing: border-box; letter-spacing: 3px; }
-        .game-frame { border: 2px solid #004466; padding: 8px; border-radius: 15px; background: #000; }
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-        .cell { width: 55px; height: 55px; border-radius: 8px; cursor: pointer; background: #0a1a2a; border: 1px solid #1a3a5a; display: flex; align-items: center; justify-content: center; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEMS MINES VIP</title>
+
+<style>
+:root {
+    --gold: #ffd700;
+    --electric-blue: #00d4ff;
+    --bg-dark: #000c18;
+    --vip-red: #ff3e3e;
+}
+
+body {
+    margin: 0;
+    font-family: Arial;
+    background: var(--bg-dark);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.main-title {
+    font-size: 35px;
+    color: var(--gold);
+    margin-bottom: 40px;
+}
+
+.btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 250px;
+}
+
+button {
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-trial {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+}
+
+.btn-vip {
+    background: gold;
+    color: black;
+    font-weight: bold;
+}
+
+.auth-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.active {
+    display: flex;
+}
+
+input {
+    padding: 10px;
+    margin: 10px;
+    width: 200px;
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+}
+
+.cell {
+    width: 50px;
+    height: 50px;
+    background: #1a5a8a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.gem { background: #00d4ff; }
+.bomb { background: red; }
+
+</style>
 </head>
+
 <body>
 
-    <button id="mute-btn" onclick="toggleMute()">🔊</button>
-    <audio id="bg-music" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg"></audio>
-    <audio id="click-sound"><source src="https://actions.google.com/sounds/v1/foley/button_click.ogg" type="audio/ogg"></audio>
-    <audio id="bomb-sound"><source src="https://actions.google.com/sounds/v1/science_fiction/low_thud.ogg" type="audio/ogg"></audio>
+<div id="landing">
+    <div class="main-title">GEMS MINES VIP</div>
 
-    <div id="screen-pass" class="screen active">
-        <div class="glass-panel">
-            <h2 style="color:var(--gold)">SYSTEM ENCRYPTION</h2>
-            <input type="password" id="passInput" placeholder="ACCESS KEY">
-            <button class="btn-3d" onclick="validatePass()">DECRYPT SYSTEM</button>
-        </div>
+    <div class="btn-group">
+        <button class="btn-trial" onclick="showTrial()">تجربة مجانية</button>
+        <button class="btn-vip" onclick="showVIP()">VIP ACCESS</button>
     </div>
+</div>
 
-    <div id="screen-choice" class="screen">
-        <div class="glass-panel">
-            <h1 style="color:var(--blue); font-size: 22px;">HHACK ANALYZER V3</h1>
-            <button class="btn-3d" onclick="goToID()">FREE TRIAL MODE</button>
-            <button class="btn-3d btn-vip" onclick="askVipPass()">🐉 VIP SERVER ACCESS</button>
-        </div>
-    </div>
+<div id="idScreen" class="auth-screen">
+    <h3>ادخل ID</h3>
+    <input id="idInput">
+    <button onclick="checkID()">استمرار</button>
+</div>
 
-    <div id="screen-id" class="screen">
-        <div class="glass-panel">
-            <h2 style="color:var(--blue)">USER VALIDATION</h2>
-            <input type="password" id="idInput" placeholder="ENTER PLAYER ID">
-            <button class="btn-3d" onclick="validateID()">CONNECT TO SERVER</button>
-        </div>
-    </div>
+<div id="passScreen" class="auth-screen">
+    <h3>ادخل الباسورد</h3>
+    <input id="passInput" type="password">
+    <button onclick="checkPass()">دخول</button>
+</div>
 
-    <div id="screen-game" class="screen">
-        <div class="signal-container">
-            <div class="signal-bar" style="height:8px"></div>
-            <div class="signal-bar" style="height:12px; animation-delay:0.2s"></div>
-            <div class="signal-bar" style="height:16px; animation-delay:0.4s"></div>
-            <span>ANALYZING SERVER... 99.8%</span>
-        </div>
-        <div class="game-frame"><div class="grid" id="grid"></div></div>
-        <div id="live-feed"><div id="feed-line">> Initializing security bypass...</div></div>
-        <div class="glass-panel" style="margin-top: 15px; padding: 10px; border-radius: 12px;">
-            <p style="margin: 5px 0; font-size: 14px;">GEMS: <span id="s_score" style="color:var(--blue)">0</span> | BOMBS: <span id="s_bombs" style="color:red">0</span></p>
-            <button class="btn-3d" style="background: #004466; color:white; padding: 10px; font-size: 14px;" onclick="initGame()">RE-SCAN GRID</button>
-        </div>
-    </div>
+<div id="gameScreen" class="auth-screen">
+    <div id="grid" class="grid"></div>
+    <p>💎 <span id="score">0</span> | 💣 <span id="bombs">0</span></p>
+</div>
 
-    <script>
-        const allowedIDs = ["user1", "admin", "15711", "10020025", "1002075", "1658237633"];
-        const bgMusic = document.getElementById('bg-music');
-        const clickSound = document.getElementById('click-sound');
-        const bombSound = document.getElementById('bomb-sound');
-        const feed = document.getElementById('feed-line');
+<script>
 
-        function toggleMute() { bgMusic.muted = !bgMusic.muted; document.getElementById('mute-btn').innerText = bgMusic.muted ? "🔇" : "🔊"; }
-        function playSound(type) { if(type === 'click') { clickSound.currentTime = 0; clickSound.play(); } if(type === 'bomb') { bombSound.currentTime = 0; bombSound.play(); } }
-        function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-        function updateFeed(msg) { feed.innerText = "> " + msg; }
+// IDs
+const allowedIDs = ["1658237633", "1002075"];
 
-        function validatePass() {
-            if(document.getElementById('passInput').value === "15711") { bgMusic.play(); showScreen('screen-choice'); } 
-            else { alert("INVALID ACCESS KEY!"); }
-        }
-        function askVipPass() {
-            let p = prompt("ENTER VIP SERVER PASSWORD:");
-            if(p === "102545") { playSound('click'); showScreen('screen-game'); initGame(); setTimeout(() => updateFeed("VIP Connection established."), 1000); }
-            else { alert("ACCESS DENIED!"); }
-        }
-        function goToID() { playSound('click'); showScreen('screen-id'); }
-        function validateID() {
-            const id = document.getElementById('idInput').value.trim();
-            if(allowedIDs.includes(id)) { 
-                playSound('click'); showScreen('screen-game'); initGame(); 
-                setTimeout(() => updateFeed("Trial User: " + id + " verified."), 1000);
-            } else { alert("ERROR: ID NOT REGISTERED!"); }
-        }
-        let bombs = [2, 7, 12, 18]; 
-        function initGame() {
-            const g = document.getElementById('grid'); g.innerHTML = '';
-            document.getElementById('s_score').innerText = '0';
-            document.getElementById('s_bombs').innerText = '0';
-            updateFeed("Scanning grid for patterns...");
-            for(let i=0; i<25; i++) {
-                let c = document.createElement('div');
-                c.className = 'cell';
-                c.onclick = () => {
-                    if(c.innerHTML !== '') return;
-                    if(bombs.includes(i)) { playSound('bomb'); c.innerHTML = '💣'; c.style.background = "#440000"; document.getElementById('s_bombs').innerText = "1"; updateFeed("WARNING: BOMB DETECTED!"); } 
-                    else { playSound('click'); c.innerHTML = '💎'; c.style.background = "#004466"; let s = document.getElementById('s_score'); s.innerText = parseInt(s.innerText) + 1; updateFeed("NODE " + i + " SECURED."); }
-                };
-                g.appendChild(c);
+// عرض التجربة
+function showTrial() {
+    document.getElementById("landing").style.display = "none";
+    document.getElementById("idScreen").classList.add("active");
+}
+
+// VIP
+function showVIP() {
+    let pass = prompt("ادخل باسورد VIP");
+    if(pass === "102545") {
+        startGame();
+    } else {
+        alert("باسورد غلط");
+    }
+}
+
+// تحقق ID
+function checkID() {
+    let id = document.getElementById("idInput").value;
+
+    if(!allowedIDs.includes(id)) {
+        alert("ID غير صحيح");
+        return;
+    }
+
+    if(localStorage.getItem("used_"+id)) {
+        alert("الـ ID ده اتستخدم قبل كده");
+        return;
+    }
+
+    localStorage.setItem("currentID", id);
+
+    document.getElementById("idScreen").classList.remove("active");
+    document.getElementById("passScreen").classList.add("active");
+}
+
+// تحقق باسورد
+function checkPass() {
+    let pass = document.getElementById("passInput").value;
+
+    if(pass === "15711") {
+        let id = localStorage.getItem("currentID");
+        localStorage.setItem("used_"+id, "true");
+        startGame();
+    } else {
+        alert("باسورد غلط");
+    }
+}
+
+// بدء اللعبة
+let bombs = [0,3];
+let score = 0;
+let bombCount = 0;
+
+function startGame() {
+    document.getElementById("passScreen").classList.remove("active");
+    document.getElementById("gameScreen").classList.add("active");
+
+    let grid = document.getElementById("grid");
+    grid.innerHTML = "";
+    score = 0;
+    bombCount = 0;
+
+    for(let i=0;i<25;i++) {
+        let cell = document.createElement("div");
+        cell.className = "cell";
+
+        cell.onclick = function() {
+            if(cell.innerHTML !== "") return;
+
+            if(bombs.includes(i)) {
+                cell.innerHTML = "💣";
+                cell.classList.add("bomb");
+                bombCount++;
+            } else {
+                cell.innerHTML = "💎";
+                cell.classList.add("gem");
+                score++;
             }
+
+            document.getElementById("score").innerText = score;
+            document.getElementById("bombs").innerText = bombCount;
         }
-    </script>
+
+        grid.appendChild(cell);
+    }
+}
+
+</script>
+
 </body>
 </html>
