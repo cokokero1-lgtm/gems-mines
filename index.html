@@ -1,250 +1,175 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GEMS MINES VIP</title>
-
-<style>
-:root {
-    --gold: #ffd700;
-    --electric-blue: #00d4ff;
-    --bg-dark: #000c18;
-    --vip-red: #ff3e3e;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: var(--bg-dark);
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-/* شاشات التحكم في الظهور */
-.screen-container {
-    display: none; /* مخفي افتراضياً */
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.active {
-    display: flex !important;
-}
-
-.main-title {
-    font-size: 35px;
-    color: var(--gold);
-    margin-bottom: 40px;
-}
-
-.btn-group {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 250px;
-}
-
-button {
-    padding: 15px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    transition: 0.3s;
-}
-
-.btn-trial {
-    background: transparent;
-    border: 2px solid white;
-    color: white;
-}
-
-.btn-vip {
-    background: gold;
-    color: black;
-    font-weight: bold;
-}
-
-input {
-    padding: 12px;
-    margin: 10px;
-    width: 220px;
-    text-align: center;
-    border-radius: 8px;
-    border: 1px solid var(--electric-blue);
-    background: #000;
-    color: #fff;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    margin-top: 20px;
-}
-
-.cell {
-    width: 55px;
-    height: 55px;
-    background: #1a5a8a;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 24px;
-}
-
-.gem { background: #00d4ff !important; }
-.bomb { background: red !important; }
-
-.submit-btn {
-    background: var(--electric-blue);
-    color: black;
-    font-weight: bold;
-    width: 100px;
-}
-
-</style>
-</head>
-
-<body>
-
-<div id="landing" class="screen-container active">
-    <div class="main-title">GEMS MINES VIP</div>
-    <div class="btn-group">
-        <button class="btn-trial" onclick="showTrial()">تجربة مجانية</button>
-        <button class="btn-vip" onclick="showVIP()">VIP ACCESS</button>
-    </div>
-</div>
-
-<div id="idScreen" class="screen-container">
-    <h2 style="color:var(--electric-blue)">ادخل ID</h2>
-    <input id="idInput" placeholder="أدخل الـ ID هنا">
-    <button class="submit-btn" onclick="checkID()">استمرار</button>
-</div>
-
-<div id="passScreen" class="screen-container">
-    <h2 style="color:var(--gold)">ادخل الباسورد</h2>
-    <input id="passInput" type="password" placeholder="كلمة المرور">
-    <button class="submit-btn" style="background:var(--gold)" onclick="checkPass()">دخول</button>
-</div>
-
-<div id="gameScreen" class="screen-container">
-    <div class="main-title" style="font-size: 24px; margin-bottom: 10px;">VIP PLATFORM</div>
-    <div id="grid" class="grid"></div>
-    <p style="font-size: 20px; margin-top: 20px;">
-        💎 <span id="score">0</span> | 💣 <span id="bombs">0</span>
-    </p>
-    <button onclick="location.reload()" style="background: #28a745; color: white; padding: 10px 20px;">لعبة جديدة 🔄</button>
-</div>
-
-<script>
-// قائمة الـ IDs المسموحة
-const allowedIDs = ["1658237633", "1002075", "10020025"];
-
-// وظيفة التنقل بين الشاشات بأمان
-function hideAll() {
-    document.getElementById("landing").classList.remove("active");
-    document.getElementById("idScreen").classList.remove("active");
-    document.getElementById("passScreen").classList.remove("active");
-    document.getElementById("gameScreen").classList.remove("active");
-}
-
-function showTrial() {
-    hideAll();
-    document.getElementById("idScreen").classList.add("active");
-}
-
-function showVIP() {
-    let pass = prompt("ادخل باسورد VIP الخاص بالدخول السريع:");
-    if(pass === "102545") {
-        hideAll();
-        startGame();
-    } else {
-        alert("باسورد غلط");
-    }
-}
-
-function checkID() {
-    let id = document.getElementById("idInput").value.trim();
-
-    if(!allowedIDs.includes(id)) {
-        alert("ID غير صحيح");
-        return;
-    }
-
-    if(localStorage.getItem("used_"+id)) {
-        alert("الـ ID ده اتستخدم قبل كده!");
-        return;
-    }
-
-    localStorage.setItem("currentID", id);
-    hideAll();
-    document.getElementById("passScreen").classList.add("active");
-}
-
-function checkPass() {
-    let pass = document.getElementById("passInput").value;
-
-    if(pass === "15711") {
-        let id = localStorage.getItem("currentID");
-        if(id) localStorage.setItem("used_"+id, "true");
-        hideAll();
-        startGame();
-    } else {
-        alert("باسورد غلط");
-    }
-}
-
-// إعدادات اللعبة (القنابل في 0 و 3)
-let bombs = [0,3];
-let score = 0;
-let bombCount = 0;
-
-function startGame() {
-    hideAll();
-    document.getElementById("gameScreen").classList.add("active");
-
-    let grid = document.getElementById("grid");
-    grid.innerHTML = "";
-    score = 0;
-    bombCount = 0;
-    document.getElementById("score").innerText = "0";
-    document.getElementById("bombs").innerText = "0";
-
-    for(let i=0; i<25; i++) {
-        let cell = document.createElement("div");
-        cell.className = "cell";
-
-        cell.onclick = function() {
-            if(cell.innerHTML !== "") return;
-
-            if(bombs.includes(i)) {
-                cell.innerHTML = "💣";
-                cell.classList.add("bomb");
-                bombCount++;
-            } else {
-                cell.innerHTML = "💎";
-                cell.classList.add("gem");
-                score++;
-            }
-
-            document.getElementById("score").innerText = score;
-            document.getElementById("bombs").innerText = bombCount;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEMS MINES - PRO VIP AUDIO</title>
+    <style>
+        :root {
+            --gold: #ffd700;
+            --blue: #00d4ff;
+            --dark-blue: #000c18;
+            --neon: 0 0 15px rgba(0, 212, 255, 0.6);
         }
 
-        grid.appendChild(cell);
-    }
-}
-</script>
+        body, html {
+            margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif;
+            background: radial-gradient(circle, #002b4d 0%, #000c18 100%);
+            color: white; height: 100vh; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
 
+        /* زر كتم الصوت */
+        #mute-btn {
+            position: fixed; top: 20px; right: 20px; z-index: 1000;
+            background: rgba(0,0,0,0.5); border: 1px solid var(--blue);
+            color: white; padding: 10px; border-radius: 50%; cursor: pointer;
+        }
+
+        .glass-panel {
+            background: rgba(0, 26, 51, 0.9);
+            border: 2px solid var(--blue);
+            box-shadow: var(--neon);
+            border-radius: 20px; padding: 30px; text-align: center;
+            width: 85%; max-width: 350px;
+        }
+
+        .screen { display: none; width: 100%; flex-direction: column; align-items: center; }
+        .active { display: flex !important; }
+
+        .btn-3d {
+            width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 12px;
+            font-weight: bold; font-size: 18px; cursor: pointer;
+            box-shadow: 0 6px 0 #0088aa;
+            background: linear-gradient(to bottom, #00d4ff, #00aacc); color: #001a33;
+        }
+        .btn-3d:active { transform: translateY(4px); box-shadow: 0 2px 0 #0088aa; }
+
+        .btn-vip { background: linear-gradient(145deg, #ffd700, #b8860b); box-shadow: 0 6px 0 #8a6d00; color: black; }
+
+        input {
+            width: 100%; padding: 15px; margin: 20px 0; border-radius: 10px;
+            border: 2px solid var(--blue); background: #000; color: var(--blue);
+            font-size: 20px; text-align: center; box-sizing: border-box;
+        }
+
+        .game-frame { border: 4px solid #34495e; padding: 10px; border-radius: 15px; background: #001a33; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+        .cell {
+            width: 55px; height: 55px; border-radius: 8px; cursor: pointer;
+            background: linear-gradient(135deg, #1a3a5a, #0d1f2d);
+            border: 1px solid #3498db; display: flex; align-items: center; justify-content: center;
+        }
+        .crystal { font-size: 28px; filter: drop-shadow(0 0 5px var(--blue)); }
+    </style>
+</head>
+<body>
+
+    <button id="mute-btn" onclick="toggleMute()">🔊</button>
+
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="click-sound"><source src="https://actions.google.com/sounds/v1/foley/button_click.ogg" type="audio/ogg"></audio>
+    <audio id="bomb-sound"><source src="https://actions.google.com/sounds/v1/science_fiction/low_thud.ogg" type="audio/ogg"></audio>
+
+    <div id="screen-pass" class="screen active">
+        <div class="glass-panel">
+            <h2 style="color:var(--gold)">SECURITY CHECK</h2>
+            <input type="password" id="passInput" placeholder="Password">
+            <button class="btn-3d" onclick="validatePass()">فتح النظام</button>
+        </div>
+    </div>
+
+    <div id="screen-choice" class="screen">
+        <div class="glass-panel">
+            <h1 style="color:var(--blue)">GEMS MINES PRO</h1>
+            <button class="btn-3d" onclick="goToID()">تجربة مجانية</button>
+            <button class="btn-3d btn-vip" onclick="goToID()">🐉 VIP ACCESS</button>
+        </div>
+    </div>
+
+    <div id="screen-id" class="screen">
+        <div class="glass-panel">
+            <h2>VERIFY ID</h2>
+            <input type="text" id="idInput" placeholder="User ID">
+            <button class="btn-3d" onclick="validateID()">دخول اللعبة</button>
+        </div>
+    </div>
+
+    <div id="screen-game" class="screen">
+        <div class="game-frame"><div class="grid" id="grid"></div></div>
+        <div class="glass-panel" style="margin-top: 20px; padding: 15px;">
+            <p>💎: <span id="s_score">0</span> | 💣: <span id="s_bombs">0</span></p>
+            <button class="btn-3d" style="background: #27ae60; color:white;" onclick="initGame()">لعبة جديدة</button>
+        </div>
+    </div>
+
+    <script>
+        const allowedIDs = ["user1", "admin", "15711", "10020025", "1002075"];
+        const bgMusic = document.getElementById('bg-music');
+        const clickSound = document.getElementById('click-sound');
+        const bombSound = document.getElementById('bomb-sound');
+
+        function toggleMute() {
+            bgMusic.muted = !bgMusic.muted;
+            document.getElementById('mute-btn').innerText = bgMusic.muted ? "🔇" : "🔊";
+        }
+
+        function playSound(type) {
+            if(type === 'click') { clickSound.currentTime = 0; clickSound.play(); }
+            if(type === 'bomb') { bombSound.currentTime = 0; bombSound.play(); }
+        }
+
+        function validatePass() {
+            if(document.getElementById('passInput').value === "15711") {
+                bgMusic.play(); // تبدأ الموسيقى عند أول دخول ناجح
+                showScreen('screen-choice');
+            } else { alert("خطأ!"); }
+        }
+
+        function goToID() { playSound('click'); showScreen('screen-id'); }
+
+        function validateID() {
+            const id = document.getElementById('idInput').value.trim();
+            if(allowedIDs.includes(id)) {
+                playSound('click');
+                showScreen('screen-game');
+                initGame();
+            } else { alert("ID غير مسجل!"); }
+        }
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        let bombs = [0, 3];
+        function initGame() {
+            const g = document.getElementById('grid'); g.innerHTML = '';
+            document.getElementById('s_score').innerText = '0';
+            document.getElementById('s_bombs').innerText = '0';
+            for(let i=0; i<25; i++) {
+                let c = document.createElement('div');
+                c.className = 'cell';
+                c.onclick = () => {
+                    if(c.innerHTML !== '') return;
+                    if(bombs.includes(i)) {
+                        playSound('bomb');
+                        c.innerHTML = '<span class="crystal">💣</span>';
+                        c.style.background = "red";
+                        document.getElementById('s_bombs').innerText = "1";
+                    } else {
+                        playSound('click');
+                        c.innerHTML = '<span class="crystal">💎</span>';
+                        c.style.background = "var(--blue)";
+                        let s = document.getElementById('s_score');
+                        s.innerText = parseInt(s.innerText) + 1;
+                    }
+                };
+                g.appendChild(c);
+            }
+        }
+    </script>
 </body>
 </html>
